@@ -1,0 +1,21 @@
+name: networking
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ["infrastructure/networking/**"]
+  push:
+    branches: [main]
+    paths: ["infrastructure/networking/**"]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    with:
+      working-directory: infrastructure/networking
+      
