@@ -47,11 +47,20 @@ resource "aws_iam_instance_profile" "nat_ssm" {
 }
 
 resource "aws_instance" "cluster_nat" {
-  ami                  = data.aws_ami.amazon_linux_arm64.id
-  instance_type        = "t4g.nano"
-  subnet_id            = aws_subnet.cluster_public.id
-  iam_instance_profile = aws_iam_instance_profile.nat_ssm.name
-  source_dest_check    = false
+  ami                    = data.aws_ami.amazon_linux_arm64.id
+  instance_type          = "t4g.nano"
+  subnet_id              = aws_subnet.cluster_public.id
+  iam_instance_profile   = aws_iam_instance_profile.nat_ssm.name
+  vpc_security_group_ids = [aws_security_group.nat.id]
+  source_dest_check      = false
+
+  metadata_options {
+    http_tokens = "required"
+  }
+
+  root_block_device {
+    encrypted = true
+  }
 
   tags = {
     Name = "kubeadm-platform-nat"
