@@ -56,4 +56,8 @@ resource "aws_instance" "cluster_nat" {
   tags = {
     Name = "kubeadm-platform-nat"
   }
+
+  lifecycle {
+    ignore_changes = [ami]
+  }
 }
