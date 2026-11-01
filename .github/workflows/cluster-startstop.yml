@@ -1,0 +1,41 @@
+name: cluster-startstop
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Start or stop all cluster instances"
+        required: true
+        type: choice
+        options:
+          - start
+          - stop
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  startstop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_STARTSTOP_ROLE_ARN }}
+          aws-region: eu-central-1
+
+      - name: Find tagged instances
+        id: find
+        run: |
+          IDS=$(aws ec2 describe-instances \
+            --filters "Name=tag:Project,Values=aws-kubeadm-platform" \
+            --query 'Reservations[].Instances[].InstanceId' --output text)
+          echo "ids=$IDS" >> "$GITHUB_OUTPUT"
+
+      - name: Stop instances
+        if: inputs.action == 'stop' && steps.find.outputs.ids != ''
+        run: aws ec2 stop-instances --instance-ids ${{ steps.find.outputs.ids }}
+
+      - name: Start instances
+        if: inputs.action == 'start' && steps.find.outputs.ids != ''
+        run: aws ec2 start-instances --instance-ids ${{ steps.find.outputs.ids }}
