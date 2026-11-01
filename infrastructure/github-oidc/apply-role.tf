@@ -13,10 +13,8 @@ resource "aws_iam_role" "github_actions_apply" {
         Condition = {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          }
-          StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:darkobjelicic/aws-kubeadm-platform:ref:refs/heads/main"
-          }
+            "token.actions.githubusercontent.com:sub" = "repo:darkobjelicic@116880434/aws-kubeadm-platform@1419832719:ref:refs/heads/main"
+          }        
         }
       }
     ]
