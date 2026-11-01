@@ -14,9 +14,9 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4.0.1
         with:
           terraform_version: "1.16.6"
 
@@ -34,6 +34,7 @@ jobs:
         with:
           scan-type: config
           scan-ref: ${{ inputs.working-directory }}
+          version: v0.76.1
           exit-code: 1
 
   plan:
@@ -48,14 +49,14 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
           role-to-assume: ${{ vars.AWS_PLAN_ROLE_ARN }}
           aws-region: eu-central-1
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4.0.1
         with:
           terraform_version: "1.16.6"
 
@@ -67,7 +68,7 @@ jobs:
         continue-on-error: true
 
       - name: Post plan to PR
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9.0.0
         with:
           script: |
             github.rest.issues.createComment({
@@ -93,14 +94,14 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7.0.1
 
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
           role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
           aws-region: eu-central-1
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4.0.1
         with:
           terraform_version: "1.16.6"
 
