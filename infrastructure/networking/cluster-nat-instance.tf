@@ -4,7 +4,7 @@ data "aws_ami" "amazon_linux_arm64" {
 
   filter {
     name   = "name"
-    values = ["al2023-ami-*-arm64"]
+    values = ["al2023-ami-2023.*-arm64"]
   }
 
   filter {
@@ -66,7 +66,7 @@ resource "aws_instance" "cluster_nat" {
     Name = "kubeadm-platform-nat"
   }
 
-  lifecycle {
-    ignore_changes = [ami]
-  }
+  #  lifecycle {
+  #    ignore_changes = [ami]
+  #  }
 }

@@ -14,7 +14,7 @@ resource "aws_iam_role" "github_actions_apply" {
           StringEquals = {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
             "token.actions.githubusercontent.com:sub" = "repo:darkobjelicic@116880434/aws-kubeadm-platform@1419832719:environment:production"
-          }        
+          }
         }
       }
     ]
