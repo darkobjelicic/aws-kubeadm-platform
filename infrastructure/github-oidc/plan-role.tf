@@ -30,27 +30,21 @@ resource "aws_iam_policy" "github_actions_plan_ec2" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "Ec2ReadOnly"
-        Effect = "Allow"
-        Action = [
-          "ec2:DescribeVpcs",
-          "ec2:DescribeSubnets",
-          "ec2:DescribeInternetGateways",
-          "ec2:DescribeRouteTables",
-          "ec2:DescribeSecurityGroups",
-          "ec2:DescribeInstances",
-          "ec2:DescribeIamInstanceProfileAssociations",
-          "ec2:DescribeTags",
-          "ec2:DescribeImages",
-          "ec2:DescribeAvailabilityZones",
-          "ec2:DescribeNetworkInterfaces",
-        ]
+        Sid      = "Ec2ReadOnly"
+        Effect   = "Allow"
+        Action   = local.ec2_read_actions
         Resource = "*"
         Condition = {
           StringEquals = {
             "aws:RequestedRegion" = "eu-central-1"
           }
         }
+      },
+      {
+        Sid      = "FlowLogDeliveryReadOnly"
+        Effect   = "Allow"
+        Action   = local.logs_read_actions
+        Resource = "*"
       }
     ]
   })
@@ -65,10 +59,7 @@ resource "aws_iam_policy" "github_actions_plan_iam" {
       {
         Sid    = "IamReadOnlyScoped"
         Effect = "Allow"
-        Action = [
-          "iam:GetRole",
-          "iam:GetInstanceProfile",
-        ]
+        Action = local.iam_read_actions
         Resource = [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/kubeadm-platform-*",
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/kubeadm-platform-*",
