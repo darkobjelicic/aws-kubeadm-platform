@@ -96,12 +96,6 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
 
-      - name: Debug OIDC token claims
-        run: |
-          curl -sSL "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
-            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            | jq -r '.value' | cut -d '.' -f2 | base64 -d 2>/dev/null | jq .
-
       - uses: aws-actions/configure-aws-credentials@v6.3.0
         with:
           role-to-assume: ${{ vars.AWS_APPLY_ROLE_ARN }}
