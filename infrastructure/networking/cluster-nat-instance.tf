@@ -53,6 +53,7 @@ resource "aws_instance" "cluster_nat" {
   iam_instance_profile   = aws_iam_instance_profile.nat_ssm.name
   vpc_security_group_ids = [aws_security_group.nat.id]
   source_dest_check      = false
+  user_data              = file("${path.module}/scripts/nat-init.sh")
 
   metadata_options {
     http_tokens = "required"
