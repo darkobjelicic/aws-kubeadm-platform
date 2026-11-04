@@ -47,13 +47,14 @@ resource "aws_iam_instance_profile" "nat_ssm" {
 }
 
 resource "aws_instance" "cluster_nat" {
-  ami                    = data.aws_ami.amazon_linux_arm64.id
-  instance_type          = "t4g.nano"
-  subnet_id              = aws_subnet.cluster_public.id
-  iam_instance_profile   = aws_iam_instance_profile.nat_ssm.name
-  vpc_security_group_ids = [aws_security_group.nat.id]
-  source_dest_check      = false
-  user_data              = file("${path.module}/scripts/nat-init.sh")
+  ami                         = data.aws_ami.amazon_linux_arm64.id
+  instance_type               = "t4g.nano"
+  subnet_id                   = aws_subnet.cluster_public.id
+  iam_instance_profile        = aws_iam_instance_profile.nat_ssm.name
+  vpc_security_group_ids      = [aws_security_group.nat.id]
+  source_dest_check           = false
+  user_data                   = file("${path.module}/scripts/nat-init.sh")
+  user_data_replace_on_change = true
 
   metadata_options {
     http_tokens = "required"
