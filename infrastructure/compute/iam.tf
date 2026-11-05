@@ -1,0 +1,25 @@
+resource "aws_iam_role" "node_ssm" {
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+  permissions_boundary = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "node_ssm" {
+  role       = aws_iam_role.node_ssm.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "node_ssm" {
+  name = "kubeadm-platform-node-ssm"
+  role = aws_iam_role.node_ssm.name
+}
