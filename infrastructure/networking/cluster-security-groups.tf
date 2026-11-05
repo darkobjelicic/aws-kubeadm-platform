@@ -65,11 +65,11 @@ resource "aws_vpc_security_group_ingress_rule" "worker_kubelet_from_control_plan
 
 resource "aws_vpc_security_group_ingress_rule" "worker_nodeport" {
   security_group_id = aws_security_group.worker.id
-  cidr_ipv4          = aws_vpc.cluster.cidr_block
-  from_port          = 30000
-  to_port            = 32767
-  ip_protocol        = "tcp"
-  description        = "NodePort service range, reachable from within the VPC"
+  cidr_ipv4         = aws_vpc.cluster.cidr_block
+  from_port         = 30000
+  to_port           = 32767
+  ip_protocol       = "tcp"
+  description       = "NodePort service range, reachable from within the VPC"
 }
 
 resource "aws_vpc_security_group_egress_rule" "control_plane_all" {
