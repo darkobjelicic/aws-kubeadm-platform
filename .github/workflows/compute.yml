@@ -1,0 +1,20 @@
+name: compute
+
+on:
+  pull_request:
+    branches: [main]
+    paths: ["infrastructure/compute/**"]
+  push:
+    branches: [main]
+    paths: ["infrastructure/compute/**"]
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  terraform:
+    uses: ./.github/workflows/terraform.yml
+    with:
+      working-directory: infrastructure/compute
