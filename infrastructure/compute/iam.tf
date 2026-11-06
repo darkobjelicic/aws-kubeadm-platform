@@ -1,4 +1,6 @@
 resource "aws_iam_role" "node_ssm" {
+  name = "kubeadm-platform-node-ssm"
+  
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
